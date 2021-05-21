@@ -4,58 +4,60 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    float _baseSpeed = 5.0f;
-    float _gravity = 9.8f;
+    public CharacterController controller;
+    public Transform cam;
+    public LayerMask groundMask;
 
-    CharacterController characterController;
+    public float speed      = 6f;       // velocidade do jogadpr
+    public float gravity    = -9.8f;    // valor da gravidade
+    Vector3 velocity;
+    bool isGrounded;
 
-    // Referência usada para a câmera filha do jogador
-    GameObject playerCamera;
-    // Utilizada para poder travar a rotação no ângulo que quisermos
-    float cameraRotation;
+    public float turnSmoothTime = 0.1f;
+    float turnSmoothVelocity;
 
-    // Start is called before the first frame update
     void Start()
     {
-        characterController = GetComponent<CharacterController>();
-        playerCamera = GameObject.Find("Main Camera");
-        cameraRotation = 0.0f;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     // Update is called once per frame
     void Update()
-    {   
-        // Tratando movimentação do personagem com usa das teclas WASD
-        float x = Input.GetAxis("Horizontal");
-        float z = Input.GetAxis("Vertical");
+    {
+        // Verifica se esta no chão
+        isGrounded = Physics.CheckSphere(transform.position, 0.2f, groundMask);
 
-        // Verificando se é preciso aplicar a gravidade
-        float y = 0;
-        if (!characterController.isGrounded) {
-            y = -_gravity;
+        // Se no chão e descendo, resetar velocidade
+        if (isGrounded && velocity.y < 0.0f)
+        {
+            velocity.y = -1.0f;
         }
 
-        // Tratando movimentação do mouse
-        float mouse_dX = Input.GetAxis("Mouse X");
-        float mouse_dY = Input.GetAxis("Mouse Y");
+        float x = Input.GetAxisRaw("Horizontal");
+        float z = Input.GetAxisRaw("Vertical");
 
-        // Tratando a rotação da câmera
-        cameraRotation += mouse_dY;
-        Mathf.Clamp(-cameraRotation, -75.0f, 75.0f);
+        Vector3 direction = new Vector3(x, 0f, z).normalized;
 
-        Vector3 direction = transform.right * x + transform.up * y + transform.forward * z;
+        if (direction.magnitude >= 0.1f) 
+        {   
+            float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.eulerAngles.y;
+            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime);
+            transform.rotation = Quaternion.Euler(0f, angle, 0f);
 
-        characterController.Move(direction * _baseSpeed * Time.deltaTime);
-        transform.Rotate(Vector3.up, mouse_dX);
-    
-        playerCamera.transform.localRotation = Quaternion.Euler(-cameraRotation, 0.0f, 0.0f);
+            Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
+            controller.Move(moveDir.normalized * speed * Time.deltaTime);
+
+            // Aplica gravidade no personagem 
+            velocity.y += gravity * Time.deltaTime;
+            controller.Move(velocity * Time.deltaTime);
+        }
     }
 
     void LateUpdate()
     {
         RaycastHit hit;
-        Debug.DrawRay(playerCamera.transform.position, transform.forward*10.0f, Color.magenta);
-        if(Physics.Raycast(playerCamera.transform.position, transform.forward, out hit, 100.0f))
+        Debug.DrawRay(cam.position, transform.forward*10.0f, Color.magenta);
+        if(Physics.Raycast(cam.position, transform.forward, out hit, 100.0f))
         {
             Debug.Log(hit.collider.name);
         }
