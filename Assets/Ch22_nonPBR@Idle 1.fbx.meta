@@ -1,42 +1,42 @@
 fileFormatVersion: 2
-guid: 501d89074e6f82745ad1ff34466d2d1c
+guid: b406d7e4ebebe6244891e78ac86aabc4
 ModelImporter:
   serializedVersion: 19301
   internalIDToNameTable:
   - first:
       74: -203655887218126122
-    second: Idle
+    second: Idle 1
   externalObjects:
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: Ch22_1001_Diffuse
-    second: {fileID: 2800000, guid: 50a3c2e13754bb447940cd40ebe82b0d, type: 3}
+    second: {fileID: 2800000, guid: cc13b383af7146b4ca01fe25721939c8, type: 3}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: Ch22_1001_Glossiness
-    second: {fileID: 2800000, guid: c5442e009e75d074aa959d364d9379d8, type: 3}
+    second: {fileID: 2800000, guid: 07dda2392c10a4046b8070dc2779f46c, type: 3}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: Ch22_1001_Normal
-    second: {fileID: 2800000, guid: a8bb0883dd6f5274a8d15a9c0b675215, type: 3}
+    second: {fileID: 2800000, guid: 5b988cd5093b442478300561b2a97c78, type: 3}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: Ch22_1001_Specular
-    second: {fileID: 2800000, guid: 7aa4103a9154ad74e8b6dce88db3c476, type: 3}
+    second: {fileID: 2800000, guid: 3b0fa80a61cf3934f84e553f94595886, type: 3}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: Ch22_1002_Diffuse
-    second: {fileID: 2800000, guid: 23a2af4e7fd85f24d907a1e734d73577, type: 3}
+    second: {fileID: 2800000, guid: 0aec6fbc5b47de441be8e22940f4e3d9, type: 3}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: Ch22_1002_Normal
-    second: {fileID: 2800000, guid: fdebaf5b342014b4f8c96cd2533b89eb, type: 3}
+    second: {fileID: 2800000, guid: d5156d9c5a92e35428c08f415e7f2827, type: 3}
   materials:
     materialImportMode: 1
     materialName: 0
@@ -65,7 +65,7 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Idle
+      name: Idle 1
       takeName: mixamo.com
       internalID: 0
       firstFrame: 0

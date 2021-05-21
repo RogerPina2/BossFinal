@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
     public CharacterController controller;
     public Transform cam;
     public LayerMask groundMask;
+    private Animator animator;
 
     public float speed      = 6f;       // velocidade do jogadpr
     public float gravity    = -9.8f;    // valor da gravidade
@@ -19,6 +20,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
+        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -33,8 +35,11 @@ public class PlayerController : MonoBehaviour
             velocity.y = -1.0f;
         }
 
-        float x = Input.GetAxisRaw("Horizontal");
-        float z = Input.GetAxisRaw("Vertical");
+        float x = Input.GetAxis("Horizontal");
+        float z = Input.GetAxis("Vertical");
+
+        animator.SetFloat("virar", x);
+        animator.SetFloat("correr", z);
 
         Vector3 direction = new Vector3(x, 0f, z).normalized;
 
