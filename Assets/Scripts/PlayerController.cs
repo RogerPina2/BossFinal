@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    GameManager gm;
+
     public CharacterController controller;
     public Transform cam;
     public LayerMask groundMask;
@@ -19,13 +21,22 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
+        // Cursor.lockState = CursorLockMode.Locked;
         animator = GetComponent<Animator>();
+
+        gm = GameManager.GetInstance();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (gm.gameState != GameManager.GameState.GAME) return;
+
+        if(Input.GetKeyDown(KeyCode.Escape) && gm.gameState == GameManager.GameState.GAME) {
+            gm.ChangeState(GameManager.GameState.PAUSE);
+            controller.Move(new Vector3(0f,0f,0f));
+        }
+
         // Verifica se esta no chão
         isGrounded = Physics.CheckSphere(transform.position, 0.2f, groundMask);
 
@@ -65,6 +76,14 @@ public class PlayerController : MonoBehaviour
         if(Physics.Raycast(cam.position, transform.forward, out hit, 100.0f))
         {
             Debug.Log(hit.collider.name);
+        }
+    }
+
+    void Reset()
+    {
+        if(gm.lifes <= 0 && gm.gameState == GameManager.GameState.GAME)
+        {
+            gm.ChangeState(GameManager.GameState.ENDGAME);
         }
     }
 }
