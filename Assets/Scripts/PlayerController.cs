@@ -24,6 +24,10 @@ public class PlayerController : MonoBehaviour
     public float turnSmoothTime = 0.1f;
     float turnSmoothVelocity;
 
+    // Audio
+    public AudioSource walkSFX;
+    bool walkSFX_isPlaying = false;
+
     void Awake()
     {
         startposition = transform.position;
@@ -52,6 +56,8 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape) && gm.gameState == GameManager.GameState.GAME) {
             gm.ChangeState(GameManager.GameState.PAUSE);
             canMove = false;
+            walkSFX_isPlaying = false;
+            walkSFX.Stop();
         }
 
         // Verifica se esta no chão
@@ -68,6 +74,22 @@ public class PlayerController : MonoBehaviour
 
         if (canMove) 
         {
+            if (x != 0f || z != 0f)
+            {
+                if (!walkSFX_isPlaying) 
+                {
+                    walkSFX.Play();
+                    walkSFX_isPlaying = true;
+                }
+            }
+            else {
+                if (walkSFX_isPlaying)
+                {
+                    walkSFX.Stop();
+                    walkSFX_isPlaying = false;
+                }
+            }
+
             animator.SetFloat("virar", x);
             animator.SetFloat("correr", z);
 
