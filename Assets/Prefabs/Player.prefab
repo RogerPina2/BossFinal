@@ -713,13 +713,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eec0a154c85486d409ae56b44bf33a78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cam_3p: {fileID: 0}
   controller: {fileID: 1436131488653680181}
   cam: {fileID: 0}
   groundMask:
     serializedVersion: 2
     m_Bits: 256
-  speed: 2
+  speed: 3
   gravity: -9.8
+  startposition: {x: 0, y: 0, z: 0}
   turnSmoothTime: 0.1
 --- !u!1 &2335099498241789335
 GameObject:

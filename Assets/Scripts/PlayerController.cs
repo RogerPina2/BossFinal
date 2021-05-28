@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     GameManager gm;
+    public GameObject cam_3p;
 
     public CharacterController controller;
     public Transform cam;
@@ -16,8 +17,17 @@ public class PlayerController : MonoBehaviour
     Vector3 velocity;
     bool isGrounded;
 
+    bool canMove = true;
+    public Vector3 startposition;
+    public GameObject player;
+
     public float turnSmoothTime = 0.1f;
     float turnSmoothVelocity;
+
+    void Awake()
+    {
+        startposition = transform.position;
+    }
 
     void Start()
     {
@@ -30,11 +40,18 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (gm.gameState != GameManager.GameState.GAME) return;
+        if (gm.gameState != GameManager.GameState.GAME) 
+        {
+            cam_3p.SetActive(false);
+            return;
+        } else {
+            canMove = true;
+            cam_3p.SetActive(true);
+        }
 
-        if(Input.GetKeyDown(KeyCode.Escape) && gm.gameState == GameManager.GameState.GAME) {
+        if (Input.GetKeyDown(KeyCode.Escape) && gm.gameState == GameManager.GameState.GAME) {
             gm.ChangeState(GameManager.GameState.PAUSE);
-            controller.Move(new Vector3(0f,0f,0f));
+            canMove = false;
         }
 
         // Verifica se esta no chão
@@ -49,23 +66,30 @@ public class PlayerController : MonoBehaviour
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
 
-        animator.SetFloat("virar", x);
-        animator.SetFloat("correr", z);
+        if (canMove) 
+        {
+            animator.SetFloat("virar", x);
+            animator.SetFloat("correr", z);
 
-        Vector3 direction = new Vector3(x, 0f, z).normalized;
+            Vector3 direction = new Vector3(x, 0f, z).normalized;
 
-        if (direction.magnitude >= 0.1f) 
-        {   
-            float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.eulerAngles.y;
-            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime);
-            transform.rotation = Quaternion.Euler(0f, angle, 0f);
+            if (direction.magnitude >= 0.1f) 
+            {   
+                float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.eulerAngles.y;
+                float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime);
+                transform.rotation = Quaternion.Euler(0f, angle, 0f);
 
-            Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
-            controller.Move(moveDir.normalized * speed * Time.deltaTime);
+                Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
+                controller.Move(moveDir.normalized * speed * Time.deltaTime);
 
-            // Aplica gravidade no personagem 
-            velocity.y += gravity * Time.deltaTime;
-            controller.Move(velocity * Time.deltaTime);
+                // Aplica gravidade no personagem 
+                velocity.y += gravity * Time.deltaTime;
+                controller.Move(velocity * Time.deltaTime);
+            }
+        } else {
+            controller.Move(new Vector3(0f, 0f, 0f));
+            animator.SetFloat("virar", 0f);
+            animator.SetFloat("correr", 0f);
         }
     }
 
@@ -75,15 +99,17 @@ public class PlayerController : MonoBehaviour
         Debug.DrawRay(cam.position, transform.forward*10.0f, Color.magenta);
         if(Physics.Raycast(cam.position, transform.forward, out hit, 100.0f))
         {
-            Debug.Log(hit.collider.name);
+            // Debug.Log(hit.collider.name);
         }
     }
 
-    void Reset()
+    public void Reset()
     {
+        player.transform.position = startposition;
+
         if(gm.lifes <= 0 && gm.gameState == GameManager.GameState.GAME)
         {
             gm.ChangeState(GameManager.GameState.ENDGAME);
-        }
+        }        
     }
 }
