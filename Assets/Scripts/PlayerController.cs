@@ -95,6 +95,11 @@ public class PlayerController : MonoBehaviour
 
     void LateUpdate()
     {
+        if (Input.GetKey("o")) 
+        {
+            Reset();
+        }
+
         RaycastHit hit;
         Debug.DrawRay(cam.position, transform.forward*10.0f, Color.magenta);
         if(Physics.Raycast(cam.position, transform.forward, out hit, 100.0f))
