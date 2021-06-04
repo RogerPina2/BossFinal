@@ -12,12 +12,13 @@ public class PlayerController : MonoBehaviour
     public LayerMask groundMask;
     private Animator animator;
 
-    public float speed      = 6f;       // velocidade do jogadpr
+    public float speed      = 2f;       // velocidade do jogadpr
     public float gravity    = -9.8f;    // valor da gravidade
     Vector3 velocity;
     bool isGrounded;
 
     bool canMove = true;
+    bool is_spelling = false;
     public Vector3 startposition;
     public GameObject player;
 
@@ -53,6 +54,14 @@ public class PlayerController : MonoBehaviour
             cam_3p.SetActive(true);
         }
 
+        if (Input.GetKey(KeyCode.LeftShift)) {
+            speed = 4f;
+            animator.SetFloat("correr", speed);
+        } else {
+            speed = 2f;        
+            animator.SetFloat("correr", speed);
+        }
+
         if (Input.GetKeyDown(KeyCode.Escape) && gm.gameState == GameManager.GameState.GAME) {
             gm.ChangeState(GameManager.GameState.PAUSE);
             canMove = false;
@@ -72,7 +81,7 @@ public class PlayerController : MonoBehaviour
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
 
-        if (canMove) 
+        if (canMove && !is_spelling) 
         {
             if (x != 0f || z != 0f)
             {
@@ -91,7 +100,7 @@ public class PlayerController : MonoBehaviour
             }
 
             animator.SetFloat("virar", x);
-            animator.SetFloat("correr", z);
+            animator.SetFloat("andar", z);
 
             Vector3 direction = new Vector3(x, 0f, z).normalized;
 
@@ -111,7 +120,7 @@ public class PlayerController : MonoBehaviour
         } else {
             controller.Move(new Vector3(0f, 0f, 0f));
             animator.SetFloat("virar", 0f);
-            animator.SetFloat("correr", 0f);
+            animator.SetFloat("andar", 0f);
         }
     }
 
@@ -120,6 +129,19 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKey("o")) 
         {
             Reset();
+        }
+
+        if (Input.GetKeyDown("z")) {
+            animator.SetTrigger("spell1");
+            is_spelling = true;
+        }
+        if (Input.GetKeyDown("x")) {
+            animator.SetTrigger("spell2");
+            is_spelling = true;
+        }
+        if (Input.GetKeyDown("c")) {
+            animator.SetTrigger("spell3");
+            is_spelling = true;
         }
 
         RaycastHit hit;
@@ -138,5 +160,10 @@ public class PlayerController : MonoBehaviour
         {
             gm.ChangeState(GameManager.GameState.ENDGAME);
         }        
+    }
+
+    void AE_SpellStateSwitch()
+    {
+        is_spelling = false;
     }
 }
