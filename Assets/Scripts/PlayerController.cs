@@ -29,6 +29,8 @@ public class PlayerController : MonoBehaviour
     public AudioSource walkSFX;
     bool walkSFX_isPlaying = false;
 
+    public GameObject projectile;
+
     void Awake()
     {
         startposition = transform.position;
@@ -126,15 +128,11 @@ public class PlayerController : MonoBehaviour
 
     void LateUpdate()
     {
-        if (Input.GetKey("o")) 
-        {
-            Reset();
-        }
-
         if (Input.GetKeyDown("z")) {
             animator.SetTrigger("spell1");
             is_spelling = true;
         }
+
         if (Input.GetKeyDown("x")) {
             animator.SetTrigger("spell2");
             is_spelling = true;
@@ -152,18 +150,31 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void TakeDamage()
+    {
+        gm.lifes--;
+        Reset();
+    }
+
     public void Reset()
     {
-        player.transform.position = startposition;
-
-        if(gm.lifes <= 0 && gm.gameState == GameManager.GameState.GAME)
-        {
+        if (gm.lifes <= 0 && gm.gameState == GameManager.GameState.GAME)
+        {       
+            player.transform.position = startposition;
             gm.ChangeState(GameManager.GameState.ENDGAME);
-        }        
+        }   
     }
 
     void AE_SpellStateSwitch()
     {
         is_spelling = false;
+    }
+
+    void AE_Spelling_1()
+    {
+        Vector3 spawn = new Vector3(transform.position.x, 1.7f, transform.position.z + 1);
+        Rigidbody rb = Instantiate(projectile, spawn, Quaternion.identity).GetComponent<Rigidbody>();
+        rb.AddForce(transform.forward * 32f, ForceMode.Impulse);
+        rb.AddForce(transform.up * 8f, ForceMode.Impulse);
     }
 }
