@@ -22,6 +22,6 @@ public class UI_Endgame : MonoBehaviour
 
     public void Voltar()
     {
-        gm.ChangeState(GameManager.GameState.GAME);
+        gm.ChangeState(GameManager.GameState.MENU);
     }
 }
