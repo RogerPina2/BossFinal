@@ -26,6 +26,13 @@ public class Bullet : MonoBehaviour
         if (lifeTimer <= 0f) {
             Destroy (gameObject);
         }
-        
+    }
+
+    public void OnCollisionEnter(Collision col) {
+        Destroy(gameObject);
+
+        if (col.gameObject.tag == "Zombie") {
+            Destroy(col.gameObject);
+        }
     }
 }
