@@ -39,7 +39,6 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        // Cursor.lockState = CursorLockMode.Locked;
         animator = GetComponent<Animator>();
         cam_3p = cam_default;
         gm = GameManager.GetInstance();
@@ -50,12 +49,14 @@ public class PlayerController : MonoBehaviour
     {
         if (gm.gameState != GameManager.GameState.GAME) 
         {
+            Cursor.lockState = CursorLockMode.Confined;
             cam_3p.SetActive(false);
             return;
         } else {
             canMove = true;
             cam_3p.SetActive(true);
         }
+        Cursor.lockState = CursorLockMode.Locked;
 
         if (Input.GetKey(KeyCode.LeftShift)) {
             speed = 4f;
@@ -104,20 +105,26 @@ public class PlayerController : MonoBehaviour
 
             animator.SetFloat("virar", x);
             animator.SetFloat("andar", z);
+            if (z != 0) {
+                animator.SetBool("andando", true);
+            } else {
+                animator.SetBool("andando", false);
+            }
+            
 
             Vector3 direction = new Vector3(x, 0f, z).normalized;
 
+            float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.eulerAngles.y;
+            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime);
+            if (z >= 0f) {
+                transform.rotation = Quaternion.Euler(0f, angle, 0f);
+            } else {
+                transform.rotation = Quaternion.Euler(0f, targetAngle + 180f, 0f);
+            }
+
             if (direction.magnitude >= 0.1f) 
             {       
-                float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.eulerAngles.y;
-                float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime);
-
-                if (z >= 0f) {
-                    transform.rotation = Quaternion.Euler(0f, angle, 0f);
-                } else {
-                    transform.rotation = Quaternion.Euler(0f, targetAngle + 180f, 0f);
-                }
-
+                
                 Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
                 controller.Move(moveDir.normalized * speed * Time.deltaTime);
 
@@ -142,7 +149,7 @@ public class PlayerController : MonoBehaviour
             is_spelling = true;
         }
 
-        if (Input.GetKeyDown("x")) {
+        if (Input.GetMouseButtonDown(1)) {
             animator.SetTrigger("spell2");
             is_spelling = true;
         }
@@ -192,6 +199,58 @@ public class PlayerController : MonoBehaviour
         // Rigidbody rb = Instantiate(projectile, spawn, Quaternion.identity).GetComponent<Rigidbody>();
         // rb.AddForce(transform.forward * 32f, ForceMode.Impulse);
         // rb.AddForce(transform.up * 8f, ForceMode.Impulse);
+    }
+
+    void AE_Spelling_2()
+    {
+        // int qtd = 3;
+
+        // Vector3 _spawn = new Vector3(transform.position.x, 1.7f, transform.position.z);
+        // transform.rotation = Quaternion.Euler(0f, targetAngle + 180f, 0f);
+
+        float angle = transform.rotation.eulerAngles.y;
+
+        float _angle = 0f;
+        if (angle >= 90f && angle < 180f) {
+            _angle = 180f - angle;
+        }
+        else if (angle >= 180f && angle < 270f) {
+            _angle = angle - 180f;                
+        } 
+        else if (angle >= 270f && angle < 360f) {
+            _angle = 360f - angle;
+        }
+        
+        float a = Mathf.Cos(_angle * Mathf.Deg2Rad); 
+        float b = Mathf.Sin(_angle * Mathf.Deg2Rad);
+        
+
+        Vector3 _spawn = new Vector3(transform.position.x, 1.7f, transform.position.z);
+        GameObject bulletObject = Instantiate(projectile);
+        bulletObject.transform.position = _spawn + transform.forward;
+        bulletObject.transform.forward = transform.forward;
+
+        Vector3 _spawn1 = new Vector3(transform.position.x - a, 1.7f, transform.position.z + b);
+        GameObject bulletObject1 = Instantiate(projectile);
+        bulletObject1.transform.position = _spawn1 + transform.forward;
+        bulletObject1.transform.forward = transform.forward;
+
+        Vector3 _spawn2 = new Vector3(transform.position.x + a, 1.7f, transform.position.z - b);
+        GameObject bulletObject2 = Instantiate(projectile);
+        bulletObject2.transform.position = _spawn2 + transform.forward;
+        bulletObject2.transform.forward = transform.forward;
+
+        
+        // for (int i = 0; i < qtd; i++) {
+            
+
+        //     Vector3 _spawn = new Vector3(transform.position.x, 1.7f, transform.position.z);
+
+        //     GameObject bulletObject = Instantiate(projectile);
+        //     bulletObject.transform.position = _spawn + transform.forward;
+        //     bulletObject.transform.forward = transform.forward;
+
+        // }
     }
 
 }
