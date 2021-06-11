@@ -31,8 +31,11 @@ public class GameManager
     public int lifes;
     public int points;
     
+    public int gaia_lifes;
+
     private GameManager()
     {
+        gaia_lifes = 10;
         lifes = 3;
         points = 0;
         gameState = GameState.MENU;
@@ -40,6 +43,7 @@ public class GameManager
 
     private void Reset()
     {
+        gaia_lifes = 10;
         lifes = 3;
         points = 0;
     }
