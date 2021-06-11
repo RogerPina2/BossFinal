@@ -203,54 +203,25 @@ public class PlayerController : MonoBehaviour
 
     void AE_Spelling_2()
     {
-        // int qtd = 3;
-
-        // Vector3 _spawn = new Vector3(transform.position.x, 1.7f, transform.position.z);
-        // transform.rotation = Quaternion.Euler(0f, targetAngle + 180f, 0f);
-
         float angle = transform.rotation.eulerAngles.y;
 
-        float _angle = 0f;
-        if (angle >= 90f && angle < 180f) {
-            _angle = 180f - angle;
-        }
-        else if (angle >= 180f && angle < 270f) {
-            _angle = angle - 180f;                
-        } 
-        else if (angle >= 270f && angle < 360f) {
-            _angle = 360f - angle;
-        }
-        
-        float a = Mathf.Cos(_angle * Mathf.Deg2Rad); 
-        float b = Mathf.Sin(_angle * Mathf.Deg2Rad);
-        
+        float a = Mathf.Cos(angle * Mathf.Deg2Rad); 
+        float b = Mathf.Sin(angle * Mathf.Deg2Rad);
 
         Vector3 _spawn = new Vector3(transform.position.x, 1.7f, transform.position.z);
         GameObject bulletObject = Instantiate(projectile);
         bulletObject.transform.position = _spawn + transform.forward;
         bulletObject.transform.forward = transform.forward;
 
-        Vector3 _spawn1 = new Vector3(transform.position.x - a, 1.7f, transform.position.z + b);
+        Vector3 _spawn1 = new Vector3(transform.position.x + a, 1.7f, transform.position.z - b);
         GameObject bulletObject1 = Instantiate(projectile);
         bulletObject1.transform.position = _spawn1 + transform.forward;
         bulletObject1.transform.forward = transform.forward;
 
-        Vector3 _spawn2 = new Vector3(transform.position.x + a, 1.7f, transform.position.z - b);
+        Vector3 _spawn2 = new Vector3(transform.position.x - a, 1.7f, transform.position.z + b);
         GameObject bulletObject2 = Instantiate(projectile);
         bulletObject2.transform.position = _spawn2 + transform.forward;
-        bulletObject2.transform.forward = transform.forward;
-
-        
-        // for (int i = 0; i < qtd; i++) {
-            
-
-        //     Vector3 _spawn = new Vector3(transform.position.x, 1.7f, transform.position.z);
-
-        //     GameObject bulletObject = Instantiate(projectile);
-        //     bulletObject.transform.position = _spawn + transform.forward;
-        //     bulletObject.transform.forward = transform.forward;
-
-        // }
+        bulletObject2.transform.forward = transform.forward;  
     }
 
 }
