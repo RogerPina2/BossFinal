@@ -5,7 +5,8 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     GameManager gm;
-    public GameObject cam_3p;
+    public GameObject cam_default;
+    GameObject cam_3p;
 
     public CharacterController controller;
     public Transform cam;
@@ -40,7 +41,7 @@ public class PlayerController : MonoBehaviour
     {
         // Cursor.lockState = CursorLockMode.Locked;
         animator = GetComponent<Animator>();
-
+        cam_3p = cam_default;
         gm = GameManager.GetInstance();
     }
 
@@ -107,10 +108,15 @@ public class PlayerController : MonoBehaviour
             Vector3 direction = new Vector3(x, 0f, z).normalized;
 
             if (direction.magnitude >= 0.1f) 
-            {   
+            {       
                 float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.eulerAngles.y;
                 float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime);
-                transform.rotation = Quaternion.Euler(0f, angle, 0f);
+
+                if (z >= 0f) {
+                    transform.rotation = Quaternion.Euler(0f, angle, 0f);
+                } else {
+                    transform.rotation = Quaternion.Euler(0f, targetAngle + 180f, 0f);
+                }
 
                 Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
                 controller.Move(moveDir.normalized * speed * Time.deltaTime);
@@ -128,7 +134,10 @@ public class PlayerController : MonoBehaviour
 
     void LateUpdate()
     {
-        if (Input.GetKeyDown("z")) {
+        if (gm.gameState != GameManager.GameState.GAME) 
+            return;
+
+        if (Input.GetMouseButtonDown(0)) {            
             animator.SetTrigger("spell1");
             is_spelling = true;
         }
@@ -137,6 +146,7 @@ public class PlayerController : MonoBehaviour
             animator.SetTrigger("spell2");
             is_spelling = true;
         }
+
         if (Input.GetKeyDown("c")) {
             animator.SetTrigger("spell3");
             is_spelling = true;
@@ -173,8 +183,15 @@ public class PlayerController : MonoBehaviour
     void AE_Spelling_1()
     {
         Vector3 spawn = new Vector3(transform.position.x, 1.7f, transform.position.z + 1);
-        Rigidbody rb = Instantiate(projectile, spawn, Quaternion.identity).GetComponent<Rigidbody>();
-        rb.AddForce(transform.forward * 32f, ForceMode.Impulse);
-        rb.AddForce(transform.up * 8f, ForceMode.Impulse);
+        
+        GameObject bulletObject = Instantiate(projectile);
+        bulletObject.transform.position = spawn + transform.forward;
+        bulletObject.transform.forward = transform.forward;
+
+        
+        // Rigidbody rb = Instantiate(projectile, spawn, Quaternion.identity).GetComponent<Rigidbody>();
+        // rb.AddForce(transform.forward * 32f, ForceMode.Impulse);
+        // rb.AddForce(transform.up * 8f, ForceMode.Impulse);
     }
+
 }
