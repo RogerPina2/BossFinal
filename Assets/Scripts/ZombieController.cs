@@ -30,7 +30,7 @@ public class ZombieController : MonoBehaviour
 
     private void Awake()
     {
-        gaia = GameObject.Find("Player").transform;
+        gaia = GameObject.Find("Gaia").transform;
         agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         
         gm = GameManager.GetInstance();
