@@ -13,6 +13,6 @@ public class UI_Lifes : MonoBehaviour
     
     void Update()
     {
-        textComp.text = $"Vidas: {gm.lifes}";
+        textComp.text = $"{gm.gaia_lifes}";
     }
 }

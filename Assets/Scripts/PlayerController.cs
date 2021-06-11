@@ -169,13 +169,13 @@ public class PlayerController : MonoBehaviour
 
     public void TakeDamage()
     {
-        gm.lifes--;
+        gm.gaia_lifes--;
         Reset();
     }
 
     public void Reset()
     {
-        if (gm.lifes <= 0 && gm.gameState == GameManager.GameState.GAME)
+        if (gm.gaia_lifes <= 0 && gm.gameState == GameManager.GameState.GAME)
         {       
             player.transform.position = startposition;
             gm.ChangeState(GameManager.GameState.ENDGAME);
