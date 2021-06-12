@@ -1,7 +1,7 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 
-public class UI_Menu : MonoBehaviour
+public class UI_Intro : MonoBehaviour
 {
     GameManager gm;
 
@@ -12,6 +12,6 @@ public class UI_Menu : MonoBehaviour
     
     public void Comecar()
     {
-        gm.ChangeState(GameManager.GameState.INTRO);
+        gm.ChangeState(GameManager.GameState.GAME);
     }
 }

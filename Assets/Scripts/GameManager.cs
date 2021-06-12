@@ -25,7 +25,7 @@ public class GameManager
         changeStateDelegate();
     }
 
-    public enum GameState { MENU, GAME, PAUSE, ENDGAME };
+    public enum GameState { MENU, INTRO, GAME, PAUSE, ENDGAME };
 
     public GameState gameState { get; private set; }
     public int lifes;
