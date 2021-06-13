@@ -8,7 +8,7 @@ public class ZombieController : MonoBehaviour
     private Animator animator;
 
     public UnityEngine.AI.NavMeshAgent agent;
-    public PlayerController controller;
+    public GaiaController controller;
     public Transform gaia;
     public LayerMask whatIsGround, whatIsGaia;
 
@@ -91,8 +91,12 @@ public class ZombieController : MonoBehaviour
 
     void AE_Punch() {
         if (Physics.CheckSphere(transform.position, 0.9f, whatIsGaia)) {
-            controller.TakeDamage();
-        }
+            gm.gaia_lifes--;
+            if (gm.gaia_lifes <= 0 && gm.gameState == GameManager.GameState.GAME)
+            {       
+                gm.ChangeState(GameManager.GameState.ENDGAME);
+            } 
+        }   
     }
 
     void AE_PunchFinal() {

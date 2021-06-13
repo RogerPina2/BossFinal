@@ -500,7 +500,7 @@ GameObject:
   - component: {fileID: 2192276244127114598}
   m_Layer: 0
   m_Name: Zombie
-  m_TagString: Untagged
+  m_TagString: Zombie
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -531,7 +531,7 @@ Animator:
   m_GameObject: {fileID: 1638259343151499409}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 37f04440d24f69c42a94daedf275cfb5, type: 3}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e389a40793a24924dbe0d154b919be38, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -574,18 +574,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa90c57548d072d4786ab978dc1f8a29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agent: {fileID: 0}
-  controller: {fileID: 0}
-  gaia: {fileID: 0}
+  agent: {fileID: -3361590024877144724}
+  controller: {fileID: -7316723118610722256, guid: 1b3e49cc17399b64880e76e1957c9181,
+    type: 3}
+  gaia: {fileID: 3092323935056166161, guid: 1b3e49cc17399b64880e76e1957c9181, type: 3}
   whatIsGround:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
   whatIsGaia:
     serializedVersion: 2
-    m_Bits: 0
-  timeBetweenAttacks: 0
-  sightRange: 0
-  attackRange: 0
+    m_Bits: 1024
+  timeBetweenAttacks: 0.5
+  sightRange: 20
+  attackRange: 1
   gaiaInSightRange: 0
   gaiaInAttackRange: 0
 --- !u!54 &6079055787949260273
