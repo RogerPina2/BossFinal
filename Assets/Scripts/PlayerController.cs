@@ -27,6 +27,8 @@ public class PlayerController : MonoBehaviour
     float turnSmoothVelocity;
 
     // Audio
+    public AudioManager AudioManager;
+    public AudioClip spellSFX;
     public AudioSource walkSFX;
     bool walkSFX_isPlaying = false;
 
@@ -167,21 +169,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void TakeDamage()
-    {
-        gm.gaia_lifes--;
-        Reset();
-    }
-
-    public void Reset()
-    {
-        if (gm.gaia_lifes <= 0 && gm.gameState == GameManager.GameState.GAME)
-        {       
-            player.transform.position = startposition;
-            gm.ChangeState(GameManager.GameState.ENDGAME);
-        }   
-    }
-
     void AE_SpellStateSwitch()
     {
         is_spelling = false;
@@ -189,16 +176,13 @@ public class PlayerController : MonoBehaviour
 
     void AE_Spelling_1()
     {
-        Vector3 spawn = new Vector3(transform.position.x, 1.7f, transform.position.z + 1);
+        Vector3 spawn = new Vector3(transform.position.x, 1.7f, transform.position.z);
         
         GameObject bulletObject = Instantiate(projectile);
         bulletObject.transform.position = spawn + transform.forward;
         bulletObject.transform.forward = transform.forward;
 
-        
-        // Rigidbody rb = Instantiate(projectile, spawn, Quaternion.identity).GetComponent<Rigidbody>();
-        // rb.AddForce(transform.forward * 32f, ForceMode.Impulse);
-        // rb.AddForce(transform.up * 8f, ForceMode.Impulse);
+        AudioManager.PlaySFX(spellSFX);
     }
 
     void AE_Spelling_2()
@@ -222,6 +206,10 @@ public class PlayerController : MonoBehaviour
         GameObject bulletObject2 = Instantiate(projectile);
         bulletObject2.transform.position = _spawn2 + transform.forward;
         bulletObject2.transform.forward = transform.forward;  
+
+        AudioManager.PlaySFX(spellSFX);
+        AudioManager.PlaySFX(spellSFX);
+        AudioManager.PlaySFX(spellSFX);
     }
 
 }

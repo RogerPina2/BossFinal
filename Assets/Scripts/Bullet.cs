@@ -4,14 +4,22 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    public float speed = 8f;
+
+    GameManager gm;
+
+    public float speed = 12f;
     public float lifeDuration = 2f;
 
     private float lifeTimer;
 
+     // Audio
+    public AudioManager AudioManager;
+    public AudioClip zombieDying;
+
     // Start is called before the first frame update
     void Start()
     {
+        gm = GameManager.GetInstance();
         lifeTimer = lifeDuration;
     }
 
@@ -20,6 +28,12 @@ public class Bullet : MonoBehaviour
     {
         // Make the bullet move
         transform.position += transform.forward * speed * Time.deltaTime;
+        Vector3 scale = transform.localScale;
+        scale.x -= 2 * Time.deltaTime;
+        scale.y -= 2 * Time.deltaTime;
+        scale.z -= 2 * Time.deltaTime;
+
+        transform.localScale = scale;
 
         // Check if the bullet should be destroyed;
         lifeTimer -= Time.deltaTime;
@@ -33,6 +47,8 @@ public class Bullet : MonoBehaviour
 
         if (col.gameObject.tag == "Zombie") {
             Destroy(col.gameObject);
+            AudioManager.PlaySFX(zombieDying);
+            gm.points += 10;
         }
     }
 }
